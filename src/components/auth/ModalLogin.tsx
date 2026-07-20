@@ -1,0 +1,153 @@
+import { useState, type FormEvent } from "react";
+import { AuthModalShell } from "./AuthModalShell";
+
+interface ModalLoginProps {
+  onClose: () => void;
+  onSwitchToDaftar: () => void;
+  onSubmit: (email: string, kataSandi: string) => void;
+  onLupaSandi: () => void;
+}
+
+export function ModalLogin({ onClose, onSwitchToDaftar, onSubmit, onLupaSandi }: ModalLoginProps) {
+  const [email, setEmail] = useState("");
+  const [kataSandi, setKataSandi] = useState("");
+  const [tampilkanSandi, setTampilkanSandi] = useState(false);
+  const [ingatSaya, setIngatSaya] = useState(false);
+  const [error, setError] = useState<{ email?: string; kataSandi?: string }>({});
+
+  function validasi() {
+    const errBaru: { email?: string; kataSandi?: string } = {};
+    if (!email.trim()) errBaru.email = "Email wajib diisi";
+    if (!kataSandi) errBaru.kataSandi = "Kata sandi wajib diisi";
+    else if (kataSandi.length < 8) errBaru.kataSandi = "Kata sandi minimal 8 karakter";
+    setError(errBaru);
+    return Object.keys(errBaru).length === 0;
+  }
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (!validasi()) return;
+    onSubmit(email, kataSandi);
+    // TODO: sambungkan ke authService.login() begitu backend siap
+  }
+
+  return (
+    <AuthModalShell onClose={onClose}>
+      <h2 className="text-center text-lg font-bold text-gray-800">
+        Selamat datang kembali
+      </h2>
+      <p className="mb-5 text-center text-xs text-[#e8b93d]">
+        Masuk untuk lihat kondisi kas dan stok usahamu hari ini.
+      </p>
+
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
+        <div>
+          <label className="mb-1 block text-xs font-medium text-gray-600">Email</label>
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (error.email) setError((prev) => ({ ...prev, email: undefined }));
+            }}
+            placeholder="nama@gmail.com"
+            className={`w-full rounded-lg border px-3 py-2 text-sm focus:outline-none ${
+              error.email
+                ? "border-[#dc2626] focus:border-[#dc2626]"
+                : "border-gray-300 focus:border-[#557235]"
+            }`}
+          />
+          {error.email && <p className="mt-1 text-xs text-[#dc2626]">{error.email}</p>}
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs font-medium text-gray-600">Kata Sandi</label>
+          <div className="relative">
+            <input
+              type={tampilkanSandi ? "text" : "password"}
+              required
+              minLength={8}
+              value={kataSandi}
+              onChange={(e) => {
+                setKataSandi(e.target.value);
+                if (error.kataSandi) setError((prev) => ({ ...prev, kataSandi: undefined }));
+              }}
+              placeholder="Minimal 8 karakter"
+              className={`w-full rounded-lg border px-3 py-2 pr-10 text-sm focus:outline-none ${
+                error.kataSandi
+                  ? "border-[#dc2626] focus:border-[#dc2626]"
+                  : "border-gray-300 focus:border-[#557235]"
+              }`}
+            />
+            <button
+              type="button"
+              onClick={() => setTampilkanSandi((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2"
+            >
+              <img
+                src={
+                  tampilkanSandi
+                    ? "/src/assets/icons/eye-off.png"
+                    : "/src/assets/icons/eye.png"
+                }
+                alt={tampilkanSandi ? "Sembunyikan sandi" : "Tampilkan sandi"}
+                className="h-4 w-4"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = "none";
+                }}
+              />
+            </button>
+          </div>
+          {error.kataSandi && <p className="mt-1 text-xs text-[#dc2626]">{error.kataSandi}</p>}
+        </div>
+
+        <div className="flex items-center justify-between text-xs">
+          <label className="flex items-center gap-2 text-gray-600">
+            <input
+              type="checkbox"
+              checked={ingatSaya}
+              onChange={(e) => setIngatSaya(e.target.checked)}
+            />
+            Ingat saya
+          </label>
+          <button type="button" onClick={onLupaSandi} className="text-gray-500 hover:underline">
+            Lupa kata sandi?
+          </button>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full rounded-lg bg-[#557235] py-2.5 text-sm font-semibold text-white hover:bg-[#44601f]"
+        >
+          Masuk
+        </button>
+      </form>
+
+      <div className="my-4 flex items-center gap-3 text-xs text-gray-400">
+        <div className="h-px flex-1 bg-gray-200" />
+        Atau lanjutkan dengan
+        <div className="h-px flex-1 bg-gray-200" />
+      </div>
+
+      <button className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">
+        <img
+          src="/src/assets/icons/google.png"
+          alt="Google"
+          className="h-4 w-4"
+          onError={(e) => {
+            (e.target as HTMLImageElement).style.display = "none";
+          }}
+        />
+        Google
+      </button>
+
+      <p className="mt-4 text-center text-xs text-gray-500">
+        Belum punya akun?{" "}
+        <button onClick={onSwitchToDaftar} className="font-semibold text-[#557235]">
+          Daftar sekarang
+        </button>
+      </p>
+    </AuthModalShell>
+  );
+}

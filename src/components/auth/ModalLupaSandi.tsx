@@ -5,9 +5,11 @@ interface ModalLupaSandiProps {
   onClose: () => void;
   onKembaliKeMasuk: () => void;
   onKirim: (email: string) => void;
+  isSubmitting?: boolean;
+  errorMessage?: string;
 }
 
-export function ModalLupaSandi({ onClose, onKembaliKeMasuk, onKirim }: ModalLupaSandiProps) {
+export function ModalLupaSandi({ onClose, onKembaliKeMasuk, onKirim, isSubmitting = false, errorMessage }: ModalLupaSandiProps) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
@@ -18,7 +20,6 @@ export function ModalLupaSandi({ onClose, onKembaliKeMasuk, onKirim }: ModalLupa
       return;
     }
     onKirim(email);
-    // TODO: sambungkan ke authService.kirimOtpLupaSandi(email) begitu backend siap
   }
 
   return (
@@ -46,11 +47,14 @@ export function ModalLupaSandi({ onClose, onKembaliKeMasuk, onKirim }: ModalLupa
           {error && <p className="mt-1 text-xs text-[#dc2626]">{error}</p>}
         </div>
 
+        {errorMessage && <p className="text-center text-xs text-[#dc2626]">{errorMessage}</p>}
+
         <button
           type="submit"
-          className="w-full rounded-lg bg-[#557235] py-2.5 text-sm font-semibold text-white hover:bg-[#44601f]"
+          disabled={isSubmitting}
+          className="w-full rounded-lg bg-[#557235] py-2.5 text-sm font-semibold text-white hover:bg-[#44601f] disabled:cursor-not-allowed disabled:bg-[#8fa36f]"
         >
-          Kirim
+          {isSubmitting ? "Mengirim..." : "Kirim"}
         </button>
       </form>
 

@@ -1,62 +1,132 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { TransaksiKeuangan, StokBarang } from "../types/models";
+import { apiFetch } from "../utils/api";
+import { normalizeCashTransaction, normalizeInventoryItem, toBackendCashPayload, toBackendInventoryPayload } from "./dataAdapters";
 
 interface DataStoreValue {
   transaksi: TransaksiKeuangan[];
   stok: StokBarang[];
-  tambahTransaksi: (t: TransaksiKeuangan) => void;
-  updateTransaksi: (id: string, t: TransaksiKeuangan) => void;
-  hapusTransaksi: (id: string) => void;
-  tambahStok: (s: StokBarang) => void;
-  updateStok: (id: string, s: StokBarang) => void;
-  hapusStok: (id: string) => void;
+  isLoading: boolean;
+  reloadData: () => Promise<void>;
+  tambahTransaksi: (t: TransaksiKeuangan) => Promise<void>;
+  updateTransaksi: (id: string, t: TransaksiKeuangan) => Promise<void>;
+  hapusTransaksi: (id: string) => Promise<void>;
+  tambahStok: (s: StokBarang) => Promise<void>;
+  updateStok: (id: string, s: StokBarang) => Promise<void>;
+  hapusStok: (id: string) => Promise<void>;
 }
 
 const DataStoreContext = createContext<DataStoreValue | null>(null);
 
-const KUNCI_TRANSAKSI = "kasandra:transaksi";
-const KUNCI_STOK = "kasandra:stok";
-
-function muatDariStorage<T>(kunci: string): T[] {
-  try {
-    const raw = localStorage.getItem(kunci);
-    return raw ? (JSON.parse(raw) as T[]) : [];
-  } catch {
-    return [];
-  }
-}
-
 export function DataStoreProvider({ children }: { children: ReactNode }) {
-  const [transaksi, setTransaksi] = useState<TransaksiKeuangan[]>(() =>
-    muatDariStorage<TransaksiKeuangan>(KUNCI_TRANSAKSI)
-  );
-  const [stok, setStok] = useState<StokBarang[]>(() => muatDariStorage<StokBarang>(KUNCI_STOK));
+  const [transaksi, setTransaksi] = useState<TransaksiKeuangan[]>([]);
+  const [stok, setStok] = useState<StokBarang[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  async function muatData() {
+    setIsLoading(true);
+    try {
+      const [resTransaksi, resStok] = await Promise.all([
+        apiFetch<{ transactions: Array<Record<string, unknown>> }>("/cash-transactions"),
+        apiFetch<{ items: Array<Record<string, unknown>> }>("/inventory-items")
+      ]);
+      setTransaksi((resTransaksi.transactions || []).map((tx) => normalizeCashTransaction(tx)));
+      setStok((resStok.items || []).map((item) => normalizeInventoryItem(item)));
+    } catch (error) {
+      console.error("Gagal memuat data dari backend:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
-    localStorage.setItem(KUNCI_TRANSAKSI, JSON.stringify(transaksi));
-  }, [transaksi]);
+    // Initial load
+    muatData();
+  }, []);
 
-  useEffect(() => {
-    localStorage.setItem(KUNCI_STOK, JSON.stringify(stok));
-  }, [stok]);
+  async function tambahTransaksi(t: TransaksiKeuangan) {
+    try {
+      const created = await apiFetch<Record<string, unknown>>('/cash-transactions', {
+        method: 'POST',
+        body: JSON.stringify(toBackendCashPayload(t)),
+      });
+      const normalized = normalizeCashTransaction(created as Record<string, unknown>);
+      setTransaksi((prev) => [normalized, ...prev]);
+      await reloadData();
+    } catch (e) {
+      console.error(e);
+      // Fallback update local state for better UX
+      setTransaksi((prev) => [{ ...t, id: crypto.randomUUID() }, ...prev]);
+    }
+  }
 
-  function tambahTransaksi(t: TransaksiKeuangan) {
-    setTransaksi((prev) => [{ ...t, id: crypto.randomUUID() }, ...prev]);
+  async function updateTransaksi(id: string, t: TransaksiKeuangan) {
+    try {
+      await apiFetch(`/cash-transactions/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(toBackendCashPayload(t))
+      });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setTransaksi((prev) => prev.map((x) => (x.id === id ? { ...t, id } : x)));
+      await reloadData();
+    }
   }
-  function updateTransaksi(id: string, t: TransaksiKeuangan) {
-    setTransaksi((prev) => prev.map((x) => (x.id === id ? { ...t, id } : x)));
+
+  async function hapusTransaksi(id: string) {
+    try {
+      await apiFetch(`/cash-transactions/${id}`, { method: 'DELETE' });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setTransaksi((prev) => prev.filter((x) => x.id !== id));
+      await reloadData();
+    }
   }
-  function hapusTransaksi(id: string) {
-    setTransaksi((prev) => prev.filter((x) => x.id !== id));
+
+  async function tambahStok(s: StokBarang) {
+    try {
+      const res = await apiFetch<Record<string, unknown>>('/inventory-items', {
+        method: 'POST',
+        body: JSON.stringify(toBackendInventoryPayload(s))
+      });
+      const normalized = normalizeInventoryItem((res as { data?: Record<string, unknown> }).data || res);
+      setStok((prev) => [normalized, ...prev]);
+      await reloadData();
+    } catch (e) {
+      console.error(e);
+      setStok((prev) => [{ ...s, id: crypto.randomUUID() }, ...prev]);
+    }
   }
-  function tambahStok(s: StokBarang) {
-    setStok((prev) => [{ ...s, id: crypto.randomUUID() }, ...prev]);
+
+  async function updateStok(id: string, s: StokBarang) {
+    try {
+      await apiFetch(`/inventory-items/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(toBackendInventoryPayload(s))
+      });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setStok((prev) => prev.map((x) => (x.id === id ? { ...s, id } : x)));
+      await reloadData();
+    }
   }
-  function updateStok(id: string, s: StokBarang) {
-    setStok((prev) => prev.map((x) => (x.id === id ? { ...s, id } : x)));
+
+  async function hapusStok(id: string) {
+    try {
+      await apiFetch(`/inventory-items/${id}`, { method: 'DELETE' });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setStok((prev) => prev.filter((x) => x.id !== id));
+      await reloadData();
+    }
   }
-  function hapusStok(id: string) {
-    setStok((prev) => prev.filter((x) => x.id !== id));
+
+  async function reloadData() {
+    await muatData();
   }
 
   return (
@@ -64,6 +134,8 @@ export function DataStoreProvider({ children }: { children: ReactNode }) {
       value={{
         transaksi,
         stok,
+        isLoading,
+        reloadData,
         tambahTransaksi,
         updateTransaksi,
         hapusTransaksi,

@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { apiFetch } from "../utils/api";
 
 interface UserInfo {
   namaLengkap: string;
@@ -7,12 +8,11 @@ interface UserInfo {
 }
 
 interface UserContextValue extends UserInfo {
-  updateUser: (data: UserInfo) => void;
+  isLoading: boolean;
+  updateUser: (data: UserInfo) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextValue | null>(null);
-
-const KUNCI_USER = "kasandra:user";
 
 const DEFAULT_USER: UserInfo = {
   namaLengkap: "Nama User",
@@ -20,28 +20,48 @@ const DEFAULT_USER: UserInfo = {
   email: "nama@usaha.com",
 };
 
-function muatUser(): UserInfo {
-  try {
-    const raw = localStorage.getItem(KUNCI_USER);
-    return raw ? (JSON.parse(raw) as UserInfo) : DEFAULT_USER;
-  } catch {
-    return DEFAULT_USER;
-  }
-}
-
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<UserInfo>(muatUser);
+  const [user, setUser] = useState<UserInfo>(DEFAULT_USER);
+  const [isLoading, setIsLoading] = useState(true);
+
+function muatUser() {
+    setIsLoading(true);
+    apiFetch<{ success: boolean; data?: UserInfo }>('/auth/me', { redirectOnUnauthorized: false })
+      .then((response) => {
+        if (response.success && response.data) {
+          setUser(response.data);
+        } else {
+          console.warn("Gagal memuat profil, menggunakan data default");
+        }
+      })
+      .catch((error) => {
+        console.error("Gagal memuat profil:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
 
   useEffect(() => {
-    localStorage.setItem(KUNCI_USER, JSON.stringify(user));
-  }, [user]);
+    muatUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  function updateUser(data: UserInfo) {
-    setUser(data);
+  async function updateUser(data: UserInfo) {
+    try {
+      await apiFetch('/auth/update-profile', {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      });
+      setUser(data);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 
   return (
-    <UserContext.Provider value={{ ...user, updateUser }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ ...user, isLoading, updateUser }}>{children}</UserContext.Provider>
   );
 }
 

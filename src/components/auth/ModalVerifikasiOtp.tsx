@@ -8,6 +8,8 @@ interface ModalVerifikasiOtpProps {
   onUbahEmail: () => void;
   onVerifikasi: (kode: string) => void;
   onKirimUlang: () => void;
+  isSubmitting?: boolean;
+  errorMessage?: string;
 }
 
 export function ModalVerifikasiOtp({
@@ -16,6 +18,8 @@ export function ModalVerifikasiOtp({
   onUbahEmail,
   onVerifikasi,
   onKirimUlang,
+  isSubmitting = false,
+  errorMessage,
 }: ModalVerifikasiOtpProps) {
   const [kode, setKode] = useState("");
   const [error, setError] = useState("");
@@ -53,11 +57,14 @@ export function ModalVerifikasiOtp({
         </button>
       </p>
 
+      {errorMessage && <p className="mt-2 text-center text-xs text-[#dc2626]">{errorMessage}</p>}
+
       <button
         onClick={handleVerifikasi}
-        className="mt-4 w-full rounded-lg bg-[#557235] py-2.5 text-sm font-semibold text-white hover:bg-[#44601f]"
+        disabled={isSubmitting}
+        className="mt-4 w-full rounded-lg bg-[#557235] py-2.5 text-sm font-semibold text-white hover:bg-[#44601f] disabled:cursor-not-allowed disabled:bg-[#8fa36f]"
       >
-        Verifikasi Kode
+        {isSubmitting ? "Memverifikasi..." : "Verifikasi Kode"}
       </button>
 
       <p className="mt-3 text-center text-xs">

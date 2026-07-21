@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useUser } from "../store/UserContext";
 import { AlertBanners } from "../components/dashboard/AlertBanners";
 import { CashProjectionChart } from "../components/dashboard/CashProjectionChart";
@@ -6,11 +6,34 @@ import { StatCards } from "../components/dashboard/StatCards";
 import { StokKetahananCard } from "../components/dashboard/StokKetahananCard";
 import { WhatIfPanel } from "../components/dashboard/WhatIfPanel";
 import { useDataStore } from "../store/DataStore";
+import { apiFetch } from "../utils/api";
 import type { DataPoin } from "../utils/kalkulasiLinier";
+import { normalizeForecast, type ForecastPayload } from "../store/forecastAdapters";
 
 export default function Dashboard() {
   const { transaksi, stok } = useDataStore();
   const { namaLengkap } = useUser();
+  const [forecastSummary, setForecastSummary] = useState<ReturnType<typeof normalizeForecast>>(null);
+
+  useEffect(() => {
+    let isActive = true;
+
+    async function loadForecast() {
+      try {
+        const payload = await apiFetch<ForecastPayload>('/forecast/latest');
+        if (isActive) {
+          setForecastSummary(normalizeForecast(payload));
+        }
+      } catch (error) {
+        console.error('Gagal memuat forecast dari backend:', error);
+      }
+    }
+
+    loadForecast();
+    return () => {
+      isActive = false;
+    };
+  }, [transaksi.length]);
 
   const kasSaatIni = useMemo(
     () =>
@@ -119,10 +142,11 @@ export default function Dashboard() {
       <StokKetahananCard items={itemStokKetahanan} />
 
       <WhatIfPanel
-        kasSaatIni={kasSaatIni}
+        kasSaatIni={forecastSummary?.current_balance ?? kasSaatIni}
         rataPemasukanHarian={rataPemasukanHarian}
         rataPengeluaranHarian={rataPengeluaranHarian}
         adaData={transaksi.length > 0}
+        forecastProjected30d={forecastSummary?.projected_30d}
       />
     </div>
   );

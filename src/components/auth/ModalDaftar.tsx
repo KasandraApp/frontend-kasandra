@@ -171,7 +171,14 @@ export function ModalDaftar({ onClose, onSwitchToMasuk, onSubmit }: ModalDaftarP
         <div className="h-px flex-1 bg-gray-200" />
       </div>
 
-      <button className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">
+      <button 
+        type="button"
+        onClick={() => {
+          const baseUrl = import.meta.env.VITE_GOOGLE_AUTH_URL || 'http://localhost:3000/api/v1/auth/google';
+          window.location.href = `${baseUrl}?intent=register`;
+        }}
+        className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+      >
         <img
           src="/src/assets/icons/google.png"
           alt="Google"

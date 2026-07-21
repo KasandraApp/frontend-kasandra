@@ -35,12 +35,16 @@ export default function ProfilePage() {
   const [suksesInfo, setSuksesInfo] = useState(false);
   const [suksesSandi, setSuksesSandi] = useState(false);
 
-  function handleSimpanInformasi(e: FormEvent) {
+  async function handleSimpanInformasi(e: FormEvent) {
     e.preventDefault();
-    user.updateUser({ namaLengkap, namaUsaha, email });
-    // TODO: sambungkan ke profileService.updateInformasi() begitu backend siap
-    setSuksesInfo(true);
-    setTimeout(() => setSuksesInfo(false), 2500);
+    try {
+      await user.updateUser({ namaLengkap, namaUsaha, email });
+      setSuksesInfo(true);
+      setTimeout(() => setSuksesInfo(false), 2500);
+    } catch (error) {
+      console.error('Gagal menyimpan profil:', error);
+      alert('Tidak dapat menyimpan perubahan profil. Coba lagi nanti.');
+    }
   }
 
   function handleUbahSandi(e: FormEvent) {
@@ -70,8 +74,8 @@ export default function ProfilePage() {
   }
 
   function handleLogout() {
-    // TODO: bersihin token/session beneran di sini kalau udah ada backend
-    navigate("/");
+    localStorage.removeItem('kasandra:token');
+    navigate('/');
   }
 
   const inisial = namaLengkap.trim().charAt(0).toUpperCase() || "?";

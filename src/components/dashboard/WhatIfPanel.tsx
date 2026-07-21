@@ -7,6 +7,7 @@ interface WhatIfPanelProps {
   rataPemasukanHarian: number;
   rataPengeluaranHarian: number;
   adaData: boolean;
+  forecastProjected30d?: number;
 }
 
 function RataRataSimulasi({
@@ -41,6 +42,7 @@ export function WhatIfPanel({
   rataPemasukanHarian,
   rataPengeluaranHarian,
   adaData,
+  forecastProjected30d,
 }: WhatIfPanelProps) {
   // Kedua slider dua arah: + = naik, - = turun (konsisten buat keduanya)
   const [perubahanPengeluaran, setPerubahanPengeluaran] = useState(0);
@@ -115,6 +117,11 @@ export function WhatIfPanel({
                 >
                   {formatRupiah(hasilSimulasi.estimasiKasH30)}
                 </p>
+                {typeof forecastProjected30d === "number" && (
+                  <p className="mt-1 text-xs text-gray-500">
+                    Proyeksi backend: {formatRupiah(forecastProjected30d)}
+                  </p>
+                )}
                 <p className="mt-1 text-xs text-gray-500">
                   {hasilSimulasi.selisih >= 0 ? "Naik" : "Turun"}{" "}
                   {formatRupiah(Math.abs(hasilSimulasi.selisih))} dari proyeksi awal.

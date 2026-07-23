@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import iconDashboard from "../../assets/icons/dashboard.png";
+import iconKeuangan from "../../assets/icons/keuangan.png";
+import iconStok from "../../assets/icons/stok.png";
+import iconProfile from "../../assets/icons/profile.png";
+import iconBantuan from "../../assets/icons/bantuan-masukan.png";
+import logoKasandra from "../../assets/logo-kasandra.png";
 
 const menuItems = [
-  { path: "/dashboard", label: "Dashboard", icon: "/icons/dashboard.png" },
-  { path: "/keuangan", label: "Keuangan", icon: "/icons/keuangan.png" },
-  { path: "/stok", label: "Stok", icon: "/icons/stok.png" },
-  { path: "/profile", label: "Profil", icon: "/icons/profile.png" },
-  {
-    path: "/bantuan",
-    label: "Bantuan & Masukan",
-    icon: "/icons/masukan-bantuan.png",
-  },
+  { path: "/dashboard", label: "Dashboard", icon: iconDashboard },
+  { path: "/keuangan", label: "Keuangan", icon: iconKeuangan },
+  { path: "/stok", label: "Stok", icon: iconStok },
+  { path: "/profile", label: "Profil", icon: iconProfile },
+  { path: "/bantuan", label: "Bantuan & Masukan", icon: iconBantuan },
 ];
 
 function IconMenu({ src, alt }: { src: string; alt: string }) {

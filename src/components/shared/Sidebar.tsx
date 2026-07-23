@@ -5,10 +5,15 @@ import { NavLink } from "react-router-dom";
 // "keuangan.png", "stok.png", "profile.png" belum ada - taruh nanti dengan nama ini,
 // otomatis muncul (ada fallback inisial huruf kalau gambarnya belum ada).
 const menuItems = [
-  { path: "/dashboard", label: "Dashboard", icon: "/assets/icons/dashboard.png" },
-  { path: "/keuangan", label: "Keuangan", icon: "/assets/icons/keuangan.png" },
-  { path: "/stok", label: "Stok", icon: "/assets/icons/stok.png" },
-  { path: "/profile", label: "Profile", icon: "/assets/icons/profile.png" },
+  { path: "/dashboard", label: "Dashboard", icon: "/src/assets/icons/dashboard.png" },
+  { path: "/keuangan", label: "Keuangan", icon: "/src/assets/icons/keuangan.png" },
+  { path: "/stok", label: "Stok", icon: "/src/assets/icons/stok.png" },
+  { path: "/profile", label: "Profil", icon: "/src/assets/icons/profile.png" },
+  {
+    path: "/bantuan",
+    label: "Bantuan & Masukan",
+    icon: "/src/assets/icons/masukan-bantuan.png",
+  },
 ];
 
 function IconMenu({ src, alt }: { src: string; alt: string }) {

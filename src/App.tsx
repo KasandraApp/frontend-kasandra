@@ -9,6 +9,7 @@ import KeuanganPage from "./pages/KeuanganPage";
 import StokPage from "./pages/StokPage";
 import ProfilePage from "./pages/ProfilePage";
 import GoogleSetupPage from "./pages/GoogleSetupPage";
+import BantuanPage from "./pages/BantuanPage.tsx";
 
 function InternalLayout() {
   return (
@@ -20,6 +21,7 @@ function InternalLayout() {
             <Route path="/keuangan" element={<KeuanganPage />} />
             <Route path="/stok" element={<StokPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/bantuan" element={<BantuanPage />} />
             <Route path="/oauth/google/setup" element={<GoogleSetupPage />} />
             {/* Rute lama input-data dialihkan ke Keuangan biar link lama ga rusak */}
             <Route path="/input-data" element={<Navigate to="/keuangan" replace />} />

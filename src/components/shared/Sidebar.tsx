@@ -19,7 +19,6 @@ function IconMenu({ src, alt }: { src: string; alt: string }) {
   const [gagalMuat, setGagalMuat] = useState(false);
 
   if (gagalMuat) {
-    // Fallback sementara selagi PNG icon-nya belum ditaruh: huruf pertama label
     return (
       <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-white/20 text-[10px] font-bold">
         {alt.charAt(0)}
@@ -42,11 +41,10 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Top bar mobile - cuma logo + tombol buka menu */}
       <div className="flex items-center justify-between bg-[#557235] px-4 py-3 md:hidden">
         <div className="flex items-center gap-2">
           <img
-            src="/assets/logo-kasandra.png"
+            src={logoKasandra}
             alt="Kasandra"
             className="h-8 w-8 rounded-lg object-contain"
             onError={(e) => {
@@ -64,7 +62,6 @@ export function Sidebar() {
         </button>
       </div>
 
-      {/* Overlay drawer mobile - tetep full label, ga pakai hover (mobile ga ada hover) */}
       {terbukaMobile && (
         <div className="fixed inset-0 z-50 flex md:hidden">
           <div className="w-64 bg-[#557235] p-4">
@@ -105,11 +102,10 @@ export function Sidebar() {
         </div>
       )}
 
-      {/* Sidebar tetap - desktop only. Default cuma icon (w-16), hover jadi lebar penuh + label muncul. */}
       <aside className="group sticky top-0 hidden h-screen shrink-0 flex-col overflow-hidden bg-[#557235] py-4 transition-[width] duration-200 ease-in-out md:flex md:w-16 md:hover:w-56">
         <div className="mb-8 flex items-center gap-2 px-[18px]">
           <img
-            src="/assets/logo-kasandra.png"
+            src={logoKasandra}
             alt="Kasandra"
             className="h-8 w-8 shrink-0 rounded-lg object-contain"
             onError={(e) => {

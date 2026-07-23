@@ -7,8 +7,8 @@ interface AlertBannerProps {
 function AlertBanner({ severity, title, desc }: AlertBannerProps) {
   const isKritis = severity === "critical";
   const iconSrc = isKritis
-    ? "/src/assets/icons/peringatan-merah.png"
-    : "/src/assets/icons/peringatan-kuning.png";
+    ? "/assets/icons/peringatan-merah.png"
+    : "/assets/icons/peringatan-kuning.png";
 
   return (
     <div

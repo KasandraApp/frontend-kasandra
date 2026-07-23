@@ -6,22 +6,22 @@ interface FiturItem {
 
 const fiturList: FiturItem[] = [
   {
-    iconSrc: "/src/assets/icons/input-harian.png",
+    iconSrc: "/assets/icons/input-harian.png",
     title: "Input Data Harian",
     desc: "Catat transaksi dan stok harian sebagai dasar analisis dan proyeksi bisnis.",
   },
   {
-    iconSrc: "/src/assets/icons/dashboard-visual.png",
+    iconSrc: "/assets/icons/dashboard-visual.png",
     title: "Dashboard Visual",
     desc: "Visualisasi proyeksi arus kas dan estimasi ketahanan stok yang diperbarui real-time.",
   },
   {
-    iconSrc: "/src/assets/icons/whatif.png",
+    iconSrc: "/assets/icons/whatif.png",
     title: "Simulasi What-If",
     desc: "Uji skenario bisnis dan lihat proyeksi dampaknya secara instan.",
   },
   {
-    iconSrc: "/src/assets/icons/alert.png",
+    iconSrc: "/assets/icons/alert.png",
     title: "Banner Alert",
     desc: "Dapatkan peringatan dini saat stok atau kas berisiko.",
   },

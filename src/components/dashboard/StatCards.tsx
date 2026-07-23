@@ -34,7 +34,7 @@ export function StatCards({
       <div className="flex flex-1 flex-col justify-between rounded-xl bg-[#ffebb0] p-4">
         <div className="mb-2 flex items-center justify-between text-sm font-medium text-[#557235]">
           Kas Saat Ini
-          <IconBadge src="/src/assets/icons/kas.png" alt="Kas" />
+          <IconBadge src="/assets/icons/kas.png" alt="Kas" />
         </div>
         <div>
           <p className="text-xl font-bold text-gray-800">{formatRupiah(kasSaatIni)}</p>
@@ -51,7 +51,7 @@ export function StatCards({
       <div className="flex flex-1 flex-col justify-between rounded-xl bg-[#ffebb0] p-4">
         <div className="mb-2 flex items-center justify-between text-sm font-medium text-[#557235]">
           Proyeksi 30 Hari
-          <IconBadge src="/src/assets/icons/proyeksi.png" alt="Proyeksi" />
+          <IconBadge src="/assets/icons/proyeksi.png" alt="Proyeksi" />
         </div>
         <div>
           <p className="text-xl font-bold text-gray-800">{formatRupiah(proyeksi30Hari)}</p>

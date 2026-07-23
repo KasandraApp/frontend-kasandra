@@ -35,7 +35,7 @@ export function HeroSection({ onMulaiClick }: HeroSectionProps) {
 
       <div className="hidden justify-center md:flex">
         <img
-          src="/src/assets/icons/hero-illustration.png"
+          src="/assets/icons/hero-illustration.png"
           alt="Ilustrasi Dashboard"
           className="h-full w-full object-contain"
         />

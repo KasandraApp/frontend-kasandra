@@ -20,7 +20,7 @@ export function NavbarPublic({ onMasukClick, onDaftarClick }: NavbarPublicProps)
       <div className="mx-auto flex max-w-6xl items-center justify-between">
         <div className="flex items-center gap-2">
           <img
-            src="/src/assets/logo-kasandra.png"
+            src="/assets/logo-kasandra.png"
             alt="Kasandra"
             className="h-8 w-8 rounded-lg object-contain"
             onError={(e) => {

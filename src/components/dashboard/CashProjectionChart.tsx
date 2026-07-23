@@ -56,7 +56,7 @@ function CashProjectionChartComponent({ data }: CashProjectionChartProps) {
         <p className="mb-3 text-xs text-gray-400">Berdasarkan tren transaksi harian</p>
         <div className="flex flex-1 flex-col items-center justify-center gap-2 text-center">
           <EmptyIcon
-            src="/src/assets/icons/proyeksi-kosong.png"
+            src="/assets/icons/proyeksi-kosong.png"
             alt="Belum ada proyeksi"
             fallbackEmoji="📈"
           />

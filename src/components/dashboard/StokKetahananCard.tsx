@@ -30,7 +30,7 @@ export function StokKetahananCard({ items }: StokKetahananCardProps) {
         <p className="mb-4 text-xs text-gray-400">Estimasi dihitung dari rata-rata penjualan</p>
         <div className="flex flex-col items-center justify-center gap-2 py-10 text-center">
           <EmptyIcon
-            src="/src/assets/icons/stoktercatat-kosong.png"
+            src="/assets/icons/stoktercatat-kosong.png"
             alt="Belum ada data stok tercatat"
             fallbackEmoji="📦"
           />

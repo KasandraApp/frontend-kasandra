@@ -87,9 +87,9 @@ export function ModalLogin({ onClose, onSwitchToDaftar, onSubmit, onLupaSandi }:
             >
               <img
                 src={
-                  tampilkanSandi
-                    ? "/src/assets/icons/eye-off.png"
-                    : "/src/assets/icons/eye.png"
+                tampilkanSandi
+                    ? "/assets/icons/eye-off.png"
+                    : "/assets/icons/eye.png"
                 }
                 alt={tampilkanSandi ? "Sembunyikan sandi" : "Tampilkan sandi"}
                 className="h-4 w-4"
@@ -139,7 +139,7 @@ export function ModalLogin({ onClose, onSwitchToDaftar, onSubmit, onLupaSandi }:
         className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
       >
         <img
-          src="/src/assets/icons/google.png"
+          src="/assets/icons/google.png"
           alt="Google"
           className="h-4 w-4"
           onError={(e) => {

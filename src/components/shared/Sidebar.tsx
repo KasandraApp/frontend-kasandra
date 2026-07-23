@@ -5,10 +5,10 @@ import { NavLink } from "react-router-dom";
 // "keuangan.png", "stok.png", "profile.png" belum ada - taruh nanti dengan nama ini,
 // otomatis muncul (ada fallback inisial huruf kalau gambarnya belum ada).
 const menuItems = [
-  { path: "/dashboard", label: "Dashboard", icon: "/src/assets/icons/dashboard.png" },
-  { path: "/keuangan", label: "Keuangan", icon: "/src/assets/icons/keuangan.png" },
-  { path: "/stok", label: "Stok", icon: "/src/assets/icons/stok.png" },
-  { path: "/profile", label: "Profile", icon: "/src/assets/icons/profile.png" },
+  { path: "/dashboard", label: "Dashboard", icon: "/assets/icons/dashboard.png" },
+  { path: "/keuangan", label: "Keuangan", icon: "/assets/icons/keuangan.png" },
+  { path: "/stok", label: "Stok", icon: "/assets/icons/stok.png" },
+  { path: "/profile", label: "Profile", icon: "/assets/icons/profile.png" },
 ];
 
 function IconMenu({ src, alt }: { src: string; alt: string }) {
@@ -42,7 +42,7 @@ export function Sidebar() {
       <div className="flex items-center justify-between bg-[#557235] px-4 py-3 md:hidden">
         <div className="flex items-center gap-2">
           <img
-            src="/src/assets/logo-kasandra.png"
+            src="/assets/logo-kasandra.png"
             alt="Kasandra"
             className="h-8 w-8 rounded-lg object-contain"
             onError={(e) => {
@@ -105,7 +105,7 @@ export function Sidebar() {
       <aside className="group sticky top-0 hidden h-screen shrink-0 flex-col overflow-hidden bg-[#557235] py-4 transition-[width] duration-200 ease-in-out md:flex md:w-16 md:hover:w-56">
         <div className="mb-8 flex items-center gap-2 px-[18px]">
           <img
-            src="/src/assets/logo-kasandra.png"
+            src="/assets/logo-kasandra.png"
             alt="Kasandra"
             className="h-8 w-8 shrink-0 rounded-lg object-contain"
             onError={(e) => {

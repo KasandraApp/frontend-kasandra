@@ -133,7 +133,7 @@ export function ModalLogin({ onClose, onSwitchToDaftar, onSubmit, onLupaSandi }:
       <button 
         type="button"
         onClick={() => {
-          const baseUrl = import.meta.env.VITE_GOOGLE_AUTH_URL || 'http://localhost:3000/api/v1/auth/google';
+          const baseUrl = import.meta.env.VITE_GOOGLE_AUTH_URL || 'https://backend-kasandra.vercel.app/api/v1/auth/google';
           window.location.href = `${baseUrl}?intent=login`;
         }}
         className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"

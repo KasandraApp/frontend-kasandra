@@ -12,7 +12,7 @@ const menuItems = [
   {
     path: "/bantuan",
     label: "Bantuan & Masukan",
-    icon: "/src/assets/icons/masukan-bantuan.png",
+    icon: "/src/assets/icons/bantuan-masukan.png",
   },
 ];
 

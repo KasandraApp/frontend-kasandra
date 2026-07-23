@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useUser } from "../store/UserContext";
+import { apiFetch } from "../utils/api";
 
 interface FaqItem {
   pertanyaan: string;
@@ -39,17 +40,36 @@ export default function BantuanPage() {
   const [faqTerbuka, setFaqTerbuka] = useState<number | null>(0);
   const [masukan, setMasukan] = useState("");
   const [terkirim, setTerkirim] = useState(false);
+  const [sedangMengirim, setSedangMengirim] = useState(false);
+  const [error, setError] = useState("");
 
   function toggleFaq(idx: number) {
     setFaqTerbuka((prev) => (prev === idx ? null : idx));
   }
 
-  function handleKirimMasukan() {
+  async function handleKirimMasukan() {
     if (!masukan.trim()) return;
-    // TODO: sambungkan ke endpoint feedback beneran begitu backend siap
-    setTerkirim(true);
-    setMasukan("");
-    setTimeout(() => setTerkirim(false), 3000);
+    setSedangMengirim(true);
+    setError("");
+
+    try {
+      await apiFetch("/feedback", {
+        method: "POST",
+        body: JSON.stringify({
+          nama: user.namaLengkap,
+          email: user.email,
+          masukan: masukan.trim(),
+        }),
+      });
+
+      setTerkirim(true);
+      setMasukan("");
+      setTimeout(() => setTerkirim(false), 3000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Gagal mengirim masukan. Silakan coba lagi.");
+    } finally {
+      setSedangMengirim(false);
+    }
   }
 
   return (
@@ -109,10 +129,15 @@ export default function BantuanPage() {
 
         <button
           onClick={handleKirimMasukan}
-          className="mt-4 w-full rounded-lg bg-[#557235] py-2.5 text-sm font-semibold text-[#FFFFFF] hover:bg-[#44601f] sm:w-auto sm:px-8"
+          disabled={sedangMengirim}
+          className="mt-4 w-full rounded-lg bg-[#557235] py-2.5 text-sm font-semibold text-[#FFFFFF] hover:bg-[#44601f] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:px-8"
         >
-          Kirim Masukan
+          {sedangMengirim ? "Mengirim..." : "Kirim Masukan"}
         </button>
+
+        {error && (
+          <p className="mt-3 text-sm font-medium text-red-600">{error}</p>
+        )}
 
         {terkirim && (
           <p className="mt-3 text-sm font-medium text-[#557235]">

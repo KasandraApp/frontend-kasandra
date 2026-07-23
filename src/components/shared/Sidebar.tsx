@@ -1,18 +1,15 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
-// "dashboard.png" udah ada di assets/icons.
-// "keuangan.png", "stok.png", "profile.png" belum ada - taruh nanti dengan nama ini,
-// otomatis muncul (ada fallback inisial huruf kalau gambarnya belum ada).
 const menuItems = [
-  { path: "/dashboard", label: "Dashboard", icon: "/src/assets/icons/dashboard.png" },
-  { path: "/keuangan", label: "Keuangan", icon: "/src/assets/icons/keuangan.png" },
-  { path: "/stok", label: "Stok", icon: "/src/assets/icons/stok.png" },
-  { path: "/profile", label: "Profil", icon: "/src/assets/icons/profile.png" },
+  { path: "/dashboard", label: "Dashboard", icon: "/icons/dashboard.png" },
+  { path: "/keuangan", label: "Keuangan", icon: "/icons/keuangan.png" },
+  { path: "/stok", label: "Stok", icon: "/icons/stok.png" },
+  { path: "/profile", label: "Profil", icon: "/icons/profile.png" },
   {
     path: "/bantuan",
     label: "Bantuan & Masukan",
-    icon: "/src/assets/icons/bantuan-masukan.png",
+    icon: "/icons/masukan-bantuan.png",
   },
 ];
 

@@ -109,7 +109,7 @@ export default function BantuanPage() {
 
         <button
           onClick={handleKirimMasukan}
-          className="mt-4 w-full rounded-lg bg-[#557235] py-2.5 text-sm font-semibold text-[#e8b93d] hover:bg-[#44601f] sm:w-auto sm:px-8"
+          className="mt-4 w-full rounded-lg bg-[#557235] py-2.5 text-sm font-semibold text-[#FFFFFF] hover:bg-[#44601f] sm:w-auto sm:px-8"
         >
           Kirim Masukan
         </button>

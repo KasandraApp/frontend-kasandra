@@ -1,13 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiFetch } from "../utils/api";
-import { useUser } from "../store/UserContext";
-import { useDataStore } from "../store/DataStore";
 
 export default function GoogleSetupPage() {
   const navigate = useNavigate();
-  const user = useUser();
-  const dataStore = useDataStore();
   const [namaUsaha, setNamaUsaha] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,18 +19,11 @@ export default function GoogleSetupPage() {
     setError(null);
 
     try {
-      // Use UserContext to update local user state after successful backend update
-      if (user && user.updateUser) {
-        await user.updateUser({ namaLengkap: user.namaLengkap, namaUsaha: namaUsaha.trim(), email: user.email });
-        // refresh application data after profile update so dashboard shows latest data
-        if (dataStore && dataStore.reloadData) await dataStore.reloadData();
-      } else {
-        await apiFetch('/auth/update-profile', {
-          method: 'PUT',
-          body: JSON.stringify({ namaUsaha: namaUsaha.trim() }),
-          redirectOnUnauthorized: false,
-        });
-      }
+      await apiFetch('/auth/update-profile', {
+        method: 'PUT',
+        body: JSON.stringify({ namaUsaha: namaUsaha.trim() }),
+        redirectOnUnauthorized: false,
+      });
       navigate('/dashboard', { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Gagal menyimpan nama usaha');

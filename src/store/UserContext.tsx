@@ -52,6 +52,7 @@ function muatUser() {
       await apiFetch('/auth/update-profile', {
         method: 'PUT',
         body: JSON.stringify(data),
+        redirectOnUnauthorized: false,
       });
       setUser(data);
     } catch (e) {

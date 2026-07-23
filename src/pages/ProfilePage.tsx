@@ -5,7 +5,7 @@ import { useUser } from "../store/UserContext";
 function IconMata({ tampil }: { tampil: boolean }) {
   return (
     <img
-      src={tampil ? "/src/assets/icons/eye-off.png" : "/src/assets/icons/eye.png"}
+      src={tampil ? "/assets/icons/eye-off.png" : "/assets/icons/eye.png"}
       alt={tampil ? "Sembunyikan sandi" : "Tampilkan sandi"}
       className="h-4 w-4"
       onError={(e) => {

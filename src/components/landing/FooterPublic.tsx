@@ -4,7 +4,7 @@ export function FooterPublic() {
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 md:flex-row">
         <div className="flex items-center gap-2">
           <img
-            src="/src/assets/logo-kasandra.png"
+            src="/assets/logo-kasandra.png"
             alt="Kasandra"
             className="h-7 w-7 rounded-lg object-contain"
             onError={(e) => {

@@ -7,8 +7,8 @@ import { useDataStore } from "../store/DataStore";
 import { useUser } from "../store/UserContext";
 import { EmptyIcon } from "../components/shared/EmptyIcon";
 
-const ICON_EDIT = "/src/assets/icons/edit.png";
-const ICON_HAPUS = "/src/assets/icons/hapus.png";
+const ICON_EDIT = "/assets/icons/edit.png";
+const ICON_HAPUS = "/assets/icons/hapus.png";
 
 const KATEGORI_PEMASUKAN = ["Penjualan", "Pinjaman", "Modal Tambahan", "Lainnya"];
 const KATEGORI_PENGELUARAN = [
@@ -173,7 +173,7 @@ export default function KeuanganPage() {
         {transaksi.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-[#e8b93d]/60 py-14 text-center">
             <EmptyIcon
-              src="/src/assets/icons/transaksi-kosong.png"
+              src="/assets/icons/transaksi-kosong.png"
               alt="Belum ada data transaksi"
               fallbackEmoji="🧾"
             />

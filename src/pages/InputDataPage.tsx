@@ -5,8 +5,8 @@ import { formatRupiah } from "../utils/formatRupiah";
 
 type Tab = "keuangan" | "stok";
 
-const ICON_EDIT = "/src/assets/icons/edit.png";
-const ICON_HAPUS = "/src/assets/icons/hapus.png";
+const ICON_EDIT = "/assets/icons/edit.png";
+const ICON_HAPUS = "/assets/icons/hapus.png";
 
 function IconButton({ src, alt }: { src: string; alt: string }) {
   return (
